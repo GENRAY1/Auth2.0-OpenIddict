@@ -1,0 +1,39 @@
+﻿services:
+  MyApiIdentity:
+    image: backend
+    container_name: MyAPI.Identity
+    build:
+      context: ./MyAPI
+      dockerfile: MyAPI.Identity/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__MyApiIdentityPg: "Host=PostgresDB;Port=${POSTGRES_PORT};Database=MyApiIdentity;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:18-alpine3.22
+    container_name: PostgresDB
+    restart: unless-stopped
+    env_file:
+        - .env
+    environment:
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+        - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+        - pg_data:/var/lib/postgresql/data
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+        interval: 10s
+        timeout: 5s
+        retries: 10
+
+volumes:
+  pg_data:
