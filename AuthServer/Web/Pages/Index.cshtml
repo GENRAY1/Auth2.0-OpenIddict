@@ -1,0 +1,7 @@
+@page
+@{
+    if (User.Identity?.IsAuthenticated == true)
+        Response.Redirect("/Account/Manage");
+    else
+        Response.Redirect("/Account/Login");
+}

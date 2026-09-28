@@ -1,17 +1,26 @@
-﻿services:
-  MyApiIdentity:
-    image: backend
-    container_name: MyAPI.Identity
+services:
+  auth:
+    container_name: AuthServer
     build:
-      context: ./MyAPI
-      dockerfile: MyAPI.Identity/Dockerfile
+      context: .
+      dockerfile: AuthServer/Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      ConnectionStrings__MyApiIdentityPg: "Host=PostgresDB;Port=${POSTGRES_PORT};Database=MyApiIdentity;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__AuthPg: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Auth__Issuer: "http://localhost:5000"
+      Auth__ApplyMigrationsOnStartup: "true"
+      Seed__Clients__WebSpa__ClientId: ${WEBSPA_CLIENT_ID}
+      Seed__Clients__SvcExample__ClientId: ${SVC_EXAMPLE_CLIENT_ID}
+      Seed__Clients__SvcExample__ClientSecret: ${SVC_EXAMPLE_SECRET}
+      OIDCProviders__Yandex__ClientId: ${YANDEX_CLIENT_ID}
+      OIDCProviders__Yandex__ClientSecret: ${YANDEX_CLIENT_SECRET}
+      OIDCProviders__VkId__ClientId: ${VKID_CLIENT_ID}
+      OIDCProviders__VkId__ClientSecret: ${VKID_CLIENT_SECRET}
     ports:
-      - "8080:8080"
+      - "5000:8080"
     restart: unless-stopped
 
   postgres:
@@ -26,7 +35,8 @@
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-        - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+        # внутри сети compose Postgres всегда на 5432; наружу — только для локальной отладки
+        - "${POSTGRES_HOST_PORT:-5433}:5432"
     volumes:
         - pg_data:/var/lib/postgresql/data
     healthcheck:

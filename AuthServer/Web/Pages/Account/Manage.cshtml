@@ -1,0 +1,39 @@
+@page
+@model AuthServer.Web.Pages.Account.ManageModel
+@{ ViewData["Title"] = "Профиль"; }
+
+<h1>@Model.UserName</h1>
+@if (Model.Message is not null)
+{
+    <p class="error">@Model.Message</p>
+}
+
+<h3>Привязанные входы</h3>
+@if (Model.Logins.Count == 0)
+{
+    <p class="muted">Нет.</p>
+}
+<ul class="plain">
+    @foreach (var login in Model.Logins)
+    {
+        <li>
+            <span>@login.ProviderDisplayName</span>
+            @if (Model.CanRemoveLogin)
+            {
+                <form method="post" asp-page-handler="Remove">
+                    <input type="hidden" name="provider" value="@login.LoginProvider" />
+                    <input type="hidden" name="providerKey" value="@login.ProviderKey" />
+                    <button type="submit" class="secondary">Отвязать</button>
+                </form>
+            }
+        </li>
+    }
+</ul>
+
+@if (Model.LinkableProviders.Count > 0)
+{
+    <h3>Привязать</h3>
+    <partial name="_ExternalButtons" model="(Model.LinkableProviders, Url.Page(null)!)" />
+}
+
+<form method="post" asp-page="./Logout"><button type="submit" class="secondary">Выйти</button></form>

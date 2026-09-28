@@ -1,0 +1,16 @@
+@page
+@model AuthServer.Web.Pages.Account.LogoutModel
+@{ ViewData["Title"] = "Выход"; }
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <h1>Выйти?</h1>
+    <form method="post">
+        <button type="submit">Выйти</button>
+    </form>
+}
+else
+{
+    <h1>Вы вышли</h1>
+    <p class="muted">Вкладку можно закрыть.</p>
+}

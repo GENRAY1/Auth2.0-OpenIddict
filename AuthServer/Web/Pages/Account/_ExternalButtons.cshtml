@@ -1,0 +1,8 @@
+@model (IReadOnlyDictionary<string, string> Providers, string ReturnUrl)
+@foreach (var (name, display) in Model.Providers)
+{
+    <form method="post" action="/external/challenge/@name">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <button type="submit" class="secondary">@display</button>
+    </form>
+}

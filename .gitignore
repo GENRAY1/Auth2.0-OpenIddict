@@ -397,3 +397,10 @@ FodyWeavers.xsd
 
 *.db
 **/.idea/
+
+# Local secrets
+.env
+*.pfx
+
+# Local docs
+docs/

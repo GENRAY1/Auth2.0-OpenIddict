@@ -1,0 +1,22 @@
+@using AuthServer.Web.Controllers
+@model AuthServer.Web.Controllers.ConsentViewModel
+@{ ViewData["Title"] = "Разрешение доступа"; }
+
+<h1>@Model.ApplicationName запрашивает доступ</h1>
+<p class="muted">Приложение получит:</p>
+<ul>
+    @foreach (var scope in Model.Scopes)
+    {
+        <li>@scope</li>
+    }
+</ul>
+
+<form method="post" action="~/connect/authorize">
+    @Html.AntiForgeryToken()
+    @foreach (var (name, value) in Model.Parameters)
+    {
+        <input type="hidden" name="@name" value="@value" />
+    }
+    <button type="submit" name="@AuthController.ConsentAcceptField" value="1">Разрешить</button>
+    <button type="submit" name="@AuthController.ConsentDenyField" value="1" class="secondary">Отклонить</button>
+</form>

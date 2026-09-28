@@ -1,0 +1,26 @@
+@page
+@model AuthServer.Web.Pages.Account.LoginModel
+@{ ViewData["Title"] = "Вход"; }
+
+<h1>Вход</h1>
+
+@if (Model.Error is not null)
+{
+    <p class="error">@Model.Error</p>
+}
+
+<form method="post">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <label asp-for="Input.Login">Email или логин</label>
+    <input asp-for="Input.Login" type="text" autocomplete="username" autofocus />
+    <label asp-for="Input.Password">Пароль</label>
+    <input asp-for="Input.Password" type="password" autocomplete="current-password" />
+    <label class="check"><input asp-for="Input.RememberMe" /> Запомнить меня</label>
+    <button type="submit">Войти</button>
+</form>
+
+@if (Model.Providers.Count > 0)
+{
+    <p class="divider">или</p>
+    <partial name="_ExternalButtons" model="(Model.Providers, Model.ReturnUrl)" />
+}
