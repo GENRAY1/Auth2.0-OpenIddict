@@ -7,7 +7,6 @@ using AuthServer.Startup;
 using AuthServer.Startup.Options;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -29,17 +28,11 @@ public static class DependencyInjection
 
     public static void AddWebUi(this IServiceCollection services)
     {
-        services.AddControllersWithViews();
+        // Контроллеры без Views: ConnectController (token, userinfo) и OidcAuthController (внешние провайдеры).
+        services.AddControllers();
 
-        // Razor Pages и Views лежат не в стандартных /Pages и /Views, а под /Web — root'ы и
-        // пути поиска нужно переопределить, иначе _ViewStart.cshtml не находит _Layout.
+        // Весь UI — Razor Pages под /Web/Pages, включая протокольные /connect/authorize и /connect/logout.
         services.AddRazorPages(o => o.RootDirectory = "/Web/Pages");
-
-        services.Configure<RazorViewEngineOptions>(o =>
-        {
-            o.ViewLocationFormats.Insert(0, "/Web/Views/{1}/{0}.cshtml");
-            o.ViewLocationFormats.Insert(1, "/Web/Views/Shared/{0}.cshtml");
-        });
     }
 
     public static void AddScheduling(this IServiceCollection services, IConfiguration configuration)

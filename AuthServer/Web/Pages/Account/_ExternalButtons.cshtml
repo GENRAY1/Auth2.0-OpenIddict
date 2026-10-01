@@ -2,6 +2,7 @@
 @foreach (var (name, display) in Model.Providers)
 {
     <form method="post" action="/external/challenge/@name">
+        @Html.AntiForgeryToken()
         <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
         <button type="submit" class="secondary">@display</button>
     </form>

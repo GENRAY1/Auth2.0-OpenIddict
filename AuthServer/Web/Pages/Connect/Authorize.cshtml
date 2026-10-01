@@ -1,0 +1,24 @@
+@page "/connect/authorize"
+@model AuthServer.Web.Pages.Connect.AuthorizeModel
+@using AuthServer.Web
+@{ ViewData["Title"] = "Разрешение доступа"; }
+
+<h1>@Model.ApplicationName запрашивает доступ</h1>
+<p class="muted">Приложение получит:</p>
+<ul>
+    @foreach (var scope in Model.Scopes)
+    {
+        <li>@scope</li>
+    }
+</ul>
+
+@* action без query: исходные параметры уже лежат в hidden-полях. С action токен не генерируется сам — добавляем явно. *@
+<form method="post" action="~/connect/authorize">
+    @Html.AntiForgeryToken()
+    @foreach (var (name, value) in Model.Parameters)
+    {
+        <input type="hidden" name="@name" value="@value" />
+    }
+    <button type="submit" name="@ConnectRequest.AcceptField" value="1">Разрешить</button>
+    <button type="submit" name="@ConnectRequest.DenyField" value="1" class="secondary">Отклонить</button>
+</form>

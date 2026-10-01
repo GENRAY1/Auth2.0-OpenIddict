@@ -46,10 +46,8 @@
       <AdditionalFiles Include="Web\Pages\Shared\_Layout.cshtml" />
       <AdditionalFiles Include="Web\Pages\_ViewImports.cshtml" />
       <AdditionalFiles Include="Web\Pages\_ViewStart.cshtml" />
-      <AdditionalFiles Include="Web\Views\Auth\Consent.cshtml" />
-      <AdditionalFiles Include="Web\Views\Auth\LogoutConfirm.cshtml" />
-      <AdditionalFiles Include="Web\Views\_ViewImports.cshtml" />
-      <AdditionalFiles Include="Web\Views\_ViewStart.cshtml" />
+      <AdditionalFiles Include="Web\Pages\Connect\Authorize.cshtml" />
+      <AdditionalFiles Include="Web\Pages\Connect\EndSession.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

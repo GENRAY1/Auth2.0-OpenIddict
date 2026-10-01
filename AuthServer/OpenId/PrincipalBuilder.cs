@@ -68,8 +68,6 @@ public sealed class PrincipalBuilder(
         identity.SetResources(await scopeManager.ListResourcesAsync(scopes).ToListAsync());
     }
 
-    // Access-токен не шифруется (DisableAccessTokenEncryption) — туда только необходимый минимум.
-    // Профиль (name, email) — в id_token и /connect/userinfo.
     private static IEnumerable<string> GetUserClaimDestinations(Claim claim)
     {
         var identity = claim.Subject!;
